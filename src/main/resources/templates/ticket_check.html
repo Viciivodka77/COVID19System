@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css"><!--引入bootstrap的css样式库-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap4.css}"><!--引入bootstrap的css样式库-->
+
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script><!--引入jQuery-->
+    <!--bootstrap是基于jQuery库的，所以应该先导入jQuery-->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script><!--引入bootstrap-->
+    <script th:src="@{/js/layui.all.js}"></script>
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/layui.css}"  media="all">
+    <title>疫情一体化管理系统 -- 面板</title>
+
+
+</head>
+<body>
+<body>
+
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">疫情一体化管理系统</a>
+    <div class="w-100"></div>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/profile">个人信息</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/logout">退出</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <span data-feather="home"></span>
+                            首页
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/order">
+                            <span data-feather="file"></span>
+                            订单
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/products">
+                            <span data-feather="shopping-cart"></span>
+                            商品
+                        </a>
+                    </li>
+                    <li sec:authorize = "hasRole('ADMIN1')" class="nav-item">
+                        <a class="nav-link " href="/admin/1/userList/">
+                            <span data-feather="users"></span>
+                            管理员操作
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/ticket">
+                            <span data-feather="bar-chart-2"></span>
+                            客户支持<span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Saved reports</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Current month
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Last quarter
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Social engagement
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Year-end sale
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">工单详情</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button class="btn btn-lg btn-outline-secondary" >
+                        <span data-feather="arrow-left"></span>
+                        <a style=" text-decoration: none ; color: #0f0f0f" href="/ticket">返回</a>
+                    </button>
+                    <button class="btn btn-lg btn-outline-secondary" >
+                        <span data-feather="file-plus"></span>
+                        <a style=" text-decoration: none ; color: #0f0f0f" href="/ticket/createNew">创建新工单</a>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <form class="form-inline col-xs-offset-1 col-xs-11" method="get" >
+
+                    <div class=" col-xs-2 form-group">
+                        <label class="control-label">主题</label>
+                        <div class="col-xs-8">
+                            <p class="form-control-static" th:text="${mainTicket.getSubject()}"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 form-group">
+                        <label class="control-label">部门</label>
+                        <div class="col-xs-8">
+                            <p class="form-control-static" th:text="(${mainTicket.getDepartment()} == 0 ) ? '其他' : ((${mainTicket.getDepartment()} == 1) ? '销售' : ((${mainTicket.getDepartment()} == 2) ? '健康' : '维修') )"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2 form-group">
+                        <label class="control-label">状态</label>
+                        <div class="col-xs-8">
+                            <p class="form-control-static" th:text="(${mainTicket.getStatus()} == 0) ? '待回复' : (${mainTicket.getStatus()} == 1 ? '已回复' : '已关闭' ) "></p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3 form-group">
+                        <label class="control-label">更新时间</label>
+                        <div class="col-xs-8">
+                            <p class="form-control-static" th:text="${#dates.format(mainTicket.getUpdateTime(),'yyyy-MM-dd HH:mm:ss')}"></p>
+                        </div>
+                    </div>
+                </form>
+
+
+
+
+            </div>
+            <br>
+            <hr>
+            <br>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" c th:text="${mainTicket.getUserName()}"></h3>
+                            <h3 class="panel-title" th:text="${#dates.format(mainTicket.getCreateTime(),'yyyy-MM-dd HH:mm:ss')}"></h3>
+                        </div>
+                        <div class="panel-body">
+                            <h4><p style="word-wrap:break-word" th:text="${mainTicket.getContent()}"></p></h4>
+                        </div>
+                    </div>
+                </li>
+                <li th:each="reply : ${replyTicketList}" class="list-group-item">
+                    <div class="" th:class="(${reply.getUserId()} != ${mainTicket.getUserId()}) ? 'panel panel-success' : 'panel panel-primary'">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" c th:text="${reply.getUserName()}"></h3>
+                            <h3 class="panel-title" th:text="${#dates.format(reply.getCreateTime(),'yyyy-MM-dd HH:mm:ss')}"></h3>
+                        </div>
+                        <div class="panel-body">
+                            <h4><p style="word-wrap:break-word" th:text="${reply.getContent()}"></p></h4>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <br>
+            <hr>
+            <br>
+            <form th:if="${mainTicket.getStatus()} != 2" class="form-horizontal col-xs-offset-1 col-xs-10" method="post" action="/ticket/reply">
+
+                <div class="form-group">
+                    <label for="mainId" class="col-sm-2 control-label">工单id</label>
+                    <div class="col-sm-7">
+                        <input type="text" name="mainId" id="mainId" class="layui-input" placeholder="请输入id" th:value="${mainTicket.getId()}"  readonly >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userName" class="col-sm-2 control-label">姓名</label>
+                    <div class="col-sm-7">
+                        <input type="text" name="userName" id="userName" class="layui-input" placeholder="请输入名称" th:value="${user.getUName()}" readonly >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userPhone" class="col-sm-2 control-label">手机号</label>
+                    <div class="col-sm-7">
+                        <input type="text" name="userPhone" id="userPhone" autocomplete="off" class="layui-input" th:value="${user.getPhone()}" readonly >
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="content" class="col-sm-2 control-label">内容</label>
+                    <div class="col-sm-7">
+                        <textarea  id="content" name="content" placeholder="请输入内容..." autocomplete="off"  class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+
+                <HR>
+                <div class="form-group">
+                    <div class="col-sm-3 col-xs-offset-4">
+                        <input type="submit" class="form-control btn btn-success" value="回复">
+                    </div>
+                </div>
+            </form>
+            <div th:if="${mainTicket.getStatus()} == 2" class=" center-block alert alert-info" role="alert">该工单已经关闭..</div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script th:src="@{/js/jquery3.5.1.js}" ></script>
+<script>window.jQuery || document.write('<script th:src="@{/js/jquery3.5.1.js}"><\/script>')</script>
+<!--<script src="../../assets/js/vendor/popper.min.js"></script>-->
+
+<!-- Icons -->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<script>
+    feather.replace()
+</script>
+
+
+</body>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css"><!--引入bootstrap的css样式库-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap4.css}"><!--引入bootstrap的css样式库-->
+
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script><!--引入jQuery-->
+    <!--bootstrap是基于jQuery库的，所以应该先导入jQuery-->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script><!--引入bootstrap-->
+    <script th:src="@{/js/layui.all.js}"></script>
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/layui.css}"  media="all">
+    <title>疫情一体化管理系统 -- 面板</title>
+
+
+</head>
+<body>
+<body>
+
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">疫情一体化管理系统</a>
+<!--    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">-->
+    <div class="w-100"></div>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/profile">个人信息</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/logout">退出</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <span data-feather="home"></span>
+                            首页 <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/order">
+                            <span data-feather="file"></span>
+                            订单
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">
+                            <span data-feather="shopping-cart"></span>
+                            商品
+                        </a>
+                    </li>
+                    <li sec:authorize = "hasRole('ADMIN1')" class="nav-item">
+                        <a class="nav-link" href="/admin/1/userList/1">
+                            <span data-feather="users"></span>
+                            管理员操作
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ticket">
+                            <span data-feather="bar-chart-2"></span>
+                            客户支持
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Saved reports</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Current month
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Last quarter
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Social engagement
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Year-end sale
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                        <button class="btn btn-sm btn-outline-secondary">Share</button>
+                        <button class="btn btn-sm btn-outline-secondary">Export</button>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                        <span data-feather="calendar"></span>
+                        This week
+                    </button>
+                </div>
+            </div>
+
+<!--            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">-->
+<!--                <legend>卡片面板</legend>-->
+<!--            </fieldset>-->
+
+            <div style="padding: 20px; background-color: gainsboro;">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md2">
+                        <div class="layui-card">
+                            <div class="layui-card-header">欢迎面板</div>
+                            <div class="layui-card-body">
+                                <p  th:text="${hiMsg}"></p>
+                                <p  th:text="'欢迎您,' + ${user.getUName()} + '！'"></p>
+                                <hr class="layui-bg-green">
+                                <p>别担心,别怕,有我们陪着您!</p>
+                                <hr class="layui-bg-green">
+                                <fieldset class="layui-elem-field">
+<!--                                    <legend>统计</legend>-->
+                                    <div class="layui-field-box">
+                                        <small th:text="'已有' + ${userCount} + '位用户使用本系统'"></small>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md2">
+                        <div class="layui-card">
+                            <div class="layui-card-header">今日打卡</div>
+                            <div class="layui-card-body">
+                                <form th:if="${!isClockIn}" class="layui-form" action="/dashboard/doClockIn" method="post" lay-filter="example">
+                                    <div class="layui-form-item">
+<!--                                            <input type="text" name="temperature" lay-verify="temperature|required" autocomplete="off" placeholder="今日体温" class="layui-input">-->
+                                        <select name="temperature" lay-verify="required" lay-search>
+                                            <option value="" selected>体温</option>
+                                            <option value="35.5">35.5</option>
+                                            <option value="35.6">35.6</option>
+                                            <option value="35.7">35.7</option>
+                                            <option value="35.8">35.8</option>
+                                            <option value="35.9">35.9</option>
+                                            <option value="36">36</option>
+                                            <option value="36.1">36.1</option>
+                                            <option value="36.2">36.2</option>
+                                            <option value="36.3">36.3</option>
+                                            <option value="36.4">36.4</option>
+                                            <option value="36.5">36.5</option>
+                                            <option value="36.6">36.6</option>
+                                            <option value="36.7">36.7</option>
+                                            <option value="36.8">36.8</option>
+                                            <option value="36.9">36.9</option>
+                                            <option value="37">37</option>
+                                            <option value="37.1">37.1</option>
+                                            <option value="37.2">37.2</option>
+                                            <option value="37.3">37.3</option>
+                                            <option value="37.4">37.4</option>
+                                            <option value="37.5">37.5</option>
+                                            <option value="37.6">37.6</option>
+                                            <option value="37.7">37.7</option>
+                                            <option value="37.8">37.8</option>
+                                            <option value="37.9">37.9</option>
+                                            <option value="38">38</option>
+                                            <option value="38.1">38以上</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="layui-form-item">
+                                            <select name="bmStatus" lay-verify="required"
+                                                    lay-filter="bmStatus">
+                                                <option value="">身心状态</option>
+                                                <option value="0">良好</option>
+                                                <option value="1">不舒适</option>
+                                                <option value="2">难受</option>
+                                            </select>
+                                    </div>
+                                    <div class="layui-form-item">
+                                            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                            <button type="button" class="layui-btn">选项疑问</button>
+                                    </div>
+                                </form>
+                                <p th:if="${isClockIn}"><strong>今天已打卡</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-card">
+                            <div class="layui-card-header">功能面板</div>
+                            <div class="layui-card-body">
+                                <fieldset class="layui-elem-field">
+                                    <legend>最近订单</legend>
+                                    <div class="layui-field-box">
+                                        <table class="layui-table" lay-size="sm">
+                                            <tbody>
+                                            <tr>
+                                                <td>AAA</td>
+                                                <td>2016-11-29</td>
+                                                <td>status</td>
+                                                <td>详情</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="layui-elem-field">
+                                    <legend>最近工单</legend>
+                                    <div class="layui-field-box">
+                                        <table class="layui-table" lay-size="sm">
+                                            <tbody>
+                                            <tr>
+                                                <td>BBB</td>
+                                                <td>2016-11-29</td>
+                                                <td>status</td>
+                                                <td>详情</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-card">
+                            <div class="layui-card-header">公告</div>
+                            <div style="padding: 15px;">
+                                <div class="jumbotron">
+                                    <div class="container">
+                                        <p>本系统所有数据均只用于毕业设计,不做任何经济收入.数据来源<a href="https://ncov.dxy.cn/ncovh5/view/pneumonia"><strong>丁香园</strong></a></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header">全国疫情信息概览</div>
+                            <div class="layui-card-body">
+                                <p th:text="${china.getGeneralRemark()}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">全国数据<small th:text=" ' 更新于' + ${#dates.format(china.getUpdateTime(),'yyyy-MM-dd HH:mm:ss')} + '(半小时更新一次)'"></small></div>
+                            <div class="layui-card-body">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col>
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>现存确诊</th>
+                                        <th>累计确诊</th>
+                                        <th>累计治愈</th>
+                                        <th>累计死亡</th>
+                                        <th>累计重症</th>
+                                        <th>疑似病例</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td th:text="${china.getCurrentConfirmedCount()} + '(' + ${china.getCurrentConfirmedCountIncr() >= 0 ? '+' : ''}+ ${china.getCurrentConfirmedCountIncr()} + ')'"></td>
+                                        <td th:text="${china.getConfirmedCount()} +  '(' + ${china.getConfirmedCountIncr() >= 0 ? '+' : ''} + ${china.getConfirmedCountIncr()} + ')'"></td>
+                                        <td th:text="${china.getCuredCount()} + '(' + ${china.getCuredCountIncr() >= 0 ? '+' : ''} +${china.getCuredCountIncr()} + ')'"></td>
+                                        <td th:text="${china.getDeadCount()} + '(' + ${china.getDeadCountIncr() >= 0 ? '+' : ''} +${china.getDeadCountIncr()} + ')'"></td>
+                                        <td th:text="${china.getSeriousCount() } + '(' + ${china.getSeriousCountIncr() >= 0 ? '+' : ''} +${china.getSeriousCountIncr()} + ')'"></td>
+                                        <td th:text="${china.getSuspectedCount() } + '(' + ${china.getSuspectedCountIncr() >= 0 ? '+' : ''} +${china.getSuspectedCountIncr()} + ')'"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">全球数据<small th:text=" ' 更新于' + ${#dates.format(china.getUpdateTime(),'yyyy-MM-dd HH:mm:ss')} + '(半小时更新一次)'"></small></div>
+                            <div class="layui-card-body">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col>
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>现存确诊</th>
+                                        <th>累计确诊</th>
+                                        <th>累计治愈</th>
+                                        <th>累计死亡</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td th:text="${global.getCurrentConfirmedCount()} + '(' + ${global.getCurrentConfirmedCountIncr() >= 0 ? '+' : ''}+ ${global.getCurrentConfirmedCountIncr()} + ')'"></td>
+                                        <td th:text="${global.getConfirmedCount()} +  '(' + ${global.getConfirmedCountIncr() >= 0 ? '+' : ''} + ${global.getConfirmedCountIncr()} + ')'"></td>
+                                        <td th:text="${global.getCuredCount()} + '(' + ${global.getCuredCountIncr() >= 0 ? '+' : ''} +${global.getCuredCountIncr()} + ')'"></td>
+                                        <td th:text="${global.getDeadCount()} + '(' + ${global.getDeadCountIncr() >= 0 ? '+' : ''} +${global.getDeadCountIncr()} + ')'"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header">Note</div>
+                            <div class="layui-card-body">
+                                <p  th:text="${china.getNote1()}"></p>
+                                <p  th:text="${china.getNote2()}"></p>
+                                <p  th:text="${china.getNote3()}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!--            <canvas class="my-4" id="myChart" width="950" height="500"></canvas>-->
+            <br>
+            <blockquote class="layui-elem-quote layui-quote-nm layui-hide" id="footer"><p>本系统所有数据均只用于毕业设计,不做任何商业用途.数据来源<a href="https://ncov.dxy.cn/ncovh5/view/pneumonia"><strong>丁香园</strong></a>,了解更多疫情信息请点击<a href="https://ncov.dxy.cn/ncovh5/view/pneumonia"><strong>丁香园</strong></a>。</p></blockquote>
+
+        </main>
+
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script th:src="@{/js/jquery3.5.1.js}" ></script>
+<script>window.jQuery || document.write('<script th:src="@{/js/jquery3.5.1.js}"><\/script>')</script>
+<!--<script src="../../assets/js/vendor/popper.min.js"></script>-->
+
+<!-- Icons -->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<script>
+    feather.replace();
+
+    layui.use('form', function(){
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        form.render();
+    });
+    var footerTpl = lay('#footer')[0].innerHTML;
+    lay('#footer').html(layui.laytpl(footerTpl).render({}))
+        .removeClass('layui-hide');
+
+</script>
+
+</body>
+</body>
+</html>

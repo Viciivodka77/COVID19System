@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="graduatedesign.ghost.mapper.UserMapper" >
+
+    <select id="selectUserList" resultType="User">
+        select * from graduate_design.user
+    </select>
+
+    <select id="selectUserListByName" resultType="User" >
+        select * from graduate_design.user where uName = #{uName}
+    </select>
+
+    <select id="selectUserListByStatus" resultType="User">
+        select * from graduate_design.user where uStatus = #{uStatus}
+    </select>
+
+    <select id="selectUserById" resultType="User">
+        select * from graduate_design.user where uID = #{uID}
+    </select>
+
+    <select id="selectUserByPhone" resultType="User">
+        select * from graduate_design.user where phone = #{phone}
+    </select>
+
+    <select id="selectUserByEmail" resultType="User">
+        select * from graduate_design.user where email = #{email}
+    </select>
+
+    <select id="countUser" resultType="int">
+        select count(*) from graduate_design.user
+    </select>
+
+    <insert id="addUser" parameterType="User">
+        insert into graduate_design.user (uID, uName, uPassword, uStatus, address, birthday, createTime, updateTime,age,phone,email) VALUE (null,#{uName},#{uPassword},#{uStatus},#{address},#{birthday},#{createTime},#{updateTime},#{age},#{phone},#{email})
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+        update graduate_design.user set uName = #{uName},uPassword = #{uPassword},uStatus = #{uStatus},address = #{address},birthday = #{birthday},updateTime = #{updateTime},age = #{age} where uID = #{uID}
+    </update>
+
+    <update id="updateUserBasic" parameterType="User">
+        update graduate_design.user set uName = #{uName},uStatus = #{uStatus},address = #{address},birthday = #{birthday},updateTime = #{updateTime},age = #{age} where uID = #{uID}
+    </update>
+
+    <update id="updateUserPwd" parameterType="User">
+        update graduate_design.user set uPassword = #{uPassword},updateTime = #{updateTime} where uID = #{uID}
+    </update>
+
+    <delete id="deleteUser">
+        delete from graduate_design.user where uID = #{uID}
+    </delete>
+
+
+
+</mapper>

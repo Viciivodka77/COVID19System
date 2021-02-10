@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css"><!--引入bootstrap的css样式库-->
+    <link rel="stylesheet" th:href="@{/css/bootstrap4.css}"><!--引入bootstrap的css样式库-->
+
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script><!--引入jQuery-->
+    <!--bootstrap是基于jQuery库的，所以应该先导入jQuery-->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script><!--引入bootstrap-->
+    <script th:src="@{/js/layui.all.js}"></script>
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/layui.css}"  media="all">
+    <title>疫情一体化管理系统 -- 面板</title>
+
+
+</head>
+<body>
+<body>
+
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">疫情一体化管理系统</a>
+    <div class="w-100"></div>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/profile">个人信息</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/logout">退出</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <span data-feather="home"></span>
+                            首页
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/order">
+                            <span data-feather="file"></span>
+                            订单
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">
+                            <span data-feather="shopping-cart"></span>
+                            商品
+                        </a>
+                    </li>
+                    <li sec:authorize = "hasRole('ADMIN1')" class="nav-item">
+                        <a class="nav-link active" href="/admin/1/userList/1">
+                            <span data-feather="users"></span>
+                            管理员操作<span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ticket">
+                            <span data-feather="bar-chart-2"></span>
+                            客户支持
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Saved reports</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Current month
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Last quarter
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Social engagement
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span data-feather="file-text"></span>
+                            Year-end sale
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">编辑商品</h1>
+            </div>
+
+            <div class="form-horizontal col-xs-8">
+
+                <form class="form-horizontal col-xs-offset-1 col-xs-7" method="post" enctype="multipart/form-data" action="/admin/1/product/add">
+
+                    <div class="form-group"  th:style="${#strings.equals(type,'edit')} ? '' : 'visibility: hidden' ">
+                        <label for="id" class="col-sm-2 control-label" >商品ID</label>
+                        <div class="col-sm-10">
+                            <input id="id" class="layui-input" type="number" name="id"  th:value=" (${dbProduct} != 'null') ? ${dbProduct.getId()} : 0  " readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">商品名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="name" id="name" class="layui-input" placeholder="请输入名称" th:value=" ( ${dbProduct} != 'null') ? ${dbProduct.getName()} : '' ">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="details" class="col-sm-2 control-label">商品详情</label>
+                        <div class="col-sm-10">
+                            <textarea id="details" name="details" placeholder="请输入内容" autocomplete="off"  class="layui-textarea" th:text=" ( ${dbProduct} != 'null') ? ${dbProduct.getDetails()} : '' "></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stock" class="col-sm-2 control-label">库存</label>
+                        <div class="col-sm-10">
+                            <input type="number" name="stock" id="stock" autocomplete="off" class="layui-input" th:value=" ( ${dbProduct} != 'null') ? ${dbProduct.getStock()} : 0 ">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price" class="col-sm-2 control-label">价格</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="price" id="price" autocomplete="off" class="layui-input" oninput="clearNoNum(this)" th:value=" ( ${dbProduct} != 'null') ? ${dbProduct.getPrice()} : 0 ">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group" th:style="${#strings.equals(type,'edit')} ? '' : 'display:none' ">
+                        <label for="createdTime" class="col-sm-2 control-label">上架时间</label>
+                        <div class="col-sm-10">
+                            <input id="createdTime" class="layui-input" type="text" name="createdTime"  th:value="(${dbProduct} != 'null') ? ${#dates.format(dbProduct.getCreatedTime(),'yyyy-MM-dd hh:mm:ss')} : 0" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group" th:style="${#strings.equals(type,'edit')} ? '' : 'display:none' ">
+                        <label for="updatedTime" class="col-sm-2 control-label">更新时间</label>
+                        <div class="col-sm-10">
+                            <input id="updatedTime" class="layui-input" type="text" name="updatedTime"  th:value="(${dbProduct} != 'null') ? ${#dates.format(dbProduct.getUpdatedTime(),'yyyy-MM-dd hh:mm:ss')} : 0" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="img" class="col-sm-2 control-label">商品图片</label>
+                        <div class="col-sm-10">
+                            <input name="img" type="file" class="form-control" id="img" >
+                            <img th:if="${dbProduct} != 'null'" th:src="'/productImgs/' + ${fileName}" width="100px" height="100px" alt="图片无法加载！">
+                        </div>
+                    </div>
+
+                    <HR>
+                    <div class="form-group">
+                        <div class="col-sm-3 col-xs-offset-4">
+                            <input type="submit" class="form-control btn btn-success" value="提交">
+                        </div>
+                    </div>
+
+
+                </form>
+
+                <HR>
+                <div class="form-group">
+                    <div class="col-sm-3 col-xs-offset-4">
+<!--                        <a th:href="'/admin/2/upgrade/' + ${user.getUID()}">-->
+<!--                            <input type="button" class="form-control btn btn-primary" value="提高权限">-->
+<!--                        </a>-->
+                    </div>
+                    <div class="col-sm-3">
+<!--                        <a th:href="'/admin/2/degrade/' + ${user.getUID()}">-->
+<!--                            <input type="button" class="form-control btn btn-primary" value="降低权限">-->
+<!--                        </a>-->
+                    </div>
+                </div>
+
+                <hr>
+                <!--                <div  th:if="${!#strings.isEmpty(errorMsg)}">-->
+                <!--                    <div class="alert alert-danger alert-dismissible" role="alert">-->
+                <!--                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <!--                        <strong>错误!</strong> <p th:text="${errorMsg}"></p>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+                <!--                <div  th:if="${!#strings.isEmpty(successMsg)}">-->
+                <!--                    <div class="alert alert-success alert-dismissible" role="alert">-->
+                <!--                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <!--                        <strong>成功!</strong> <p th:text="${successMsg}"></p>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </div>
+            <div class="list-group col-xs-3  ">
+                <a href="/admin/1/userList" class="list-group-item">
+                    用户总表
+                </a>
+                <a href="/admin/1/productList" class="list-group-item active">商品总表</a>
+                <a href="/admin/1/order" class="list-group-item">订单操作</a>
+                <a href="/admin/1/ticket/1" class="list-group-item">工单操作</a>
+                <a href="/admin/2/other" class="list-group-item" >其他操作</a>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script th:src="@{/js/jquery3.5.1.js}" ></script>
+<script>window.jQuery || document.write('<script th:src="@{/js/jquery3.5.1.js}"><\/script>')</script>
+<!--<script src="../../assets/js/vendor/popper.min.js"></script>-->
+
+<!-- Icons -->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<script>
+    feather.replace();
+
+    function clearNoNum(obj){
+        obj.value = obj.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/^\./g,"");  //验证第一个字符是数字而不是.
+        obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的.
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+
+    }
+
+
+</script>
+
+
+</body>
+</body>
+</html>

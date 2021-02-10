@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="graduatedesign.ghost.mapper.UserRoleMapper" >
+
+<select id="selectUserRoleByUid" resultType="Integer">
+    select rID from graduate_design.user_role where uID = #{uID}
+</select>
+
+<insert id="addUserRole" parameterType="UserRole">
+    insert into graduate_design.user_role (id, uID, rID) VALUE (#{id},#{uID},#{rID})
+</insert>
+
+<delete id="deleteUserRole" parameterType="UserRole">
+    delete from graduate_design.user_role where uID = #{uID} and rID = #{rID}
+</delete>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="graduatedesign.ghost.mapper.ProductMapper" >
+
+    <insert id="addProduct" parameterType="Product" useGeneratedKeys="true" keyProperty="id" >
+        insert into graduate_design.product values (#{id},#{name},#{details},#{price},#{stock},#{createdTime},#{updatedTime},#{imgPath})
+    </insert>
+
+    <select id="queryAllProduct" resultType="Product">
+        select * from graduate_design.product
+    </select>
+
+    <select id="queryProductById" resultType="Product">
+        select * from graduate_design.product where id = #{id}
+    </select>
+
+    <update id="updateProduct" parameterType="Product" >
+        update graduate_design.product set name = #{name},details = #{details},price = #{price},stock = #{stock},updated_time = #{updatedTime},img_path = #{imgPath} where id = #{id}
+    </update>
+
+</mapper>
