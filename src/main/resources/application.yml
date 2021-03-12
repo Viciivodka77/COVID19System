@@ -7,8 +7,8 @@ system:
 spring:
   redis:
     port: 6379
-    host: 120.25.211.148
-    password: 123456
+    host: # redis地址
+    password: #redis认证密码
     database: 0
   servlet:
     multipart:
